@@ -7,15 +7,13 @@ from email import encoders
 # ตั้งค่าข้อมูลอีเมล
 from_email = "tawunchaien@gmail.com"  # อีเมลผู้ส่ง
 password = "paqb ajjj mafd zsrr"  # รหัสผ่าน (หรือ App Password)
-to_email = "b6534721@g.sut.ac.th"  # อีเมลผู้รับ
+to_email = "b6534240@g.sut.ac.th"  # อีเมลผู้รับ
 
-# สร้างข้อความอีเมล
 msg = MIMEMultipart()
 msg['From'] = from_email
 msg['To'] = to_email
-msg['Subject'] = "Water Level Exceedance Report"  # หัวข้ออีเมล
+msg['Subject'] = "Water Level Exceedance Report" 
 
-# เนื้อหาในอีเมล
 email_body = """
 This report focuses on the monitoring and analysis of water level exceedance.
 
@@ -25,8 +23,7 @@ The objective of this report is to identify the causes of water level exceedance
 """
 msg.attach(MIMEText(email_body, 'plain'))
 
-# แนบไฟล์ (ถ้ามี)
-file_path = "/home/os/Project/DataLogger/data_water.csv"  # เปลี่ยนเป็นพาธของไฟล์ที่ต้องการแนบ
+file_path = "/home/os/Project/DataLogger/data_water.csv" 
 try:
     with open(file_path, "rb") as attachment:
         part = MIMEBase('application', 'octet-stream')
@@ -34,18 +31,17 @@ try:
         encoders.encode_base64(part)
         part.add_header(
             'Content-Disposition',
-            f'attachment; filename={file_path.split("/")[-1]}'  # ใช้ชื่อไฟล์ที่แนบ
+            f'attachment; filename={file_path.split("/")[-1]}'  
         )
         msg.attach(part)
 except FileNotFoundError:
     print(f"File not found: {file_path}, skipping attachment.")
 
-# ตั้งค่าเซิร์ฟเวอร์ SMTP
 try:
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
-    server.login(from_email, password)  # ล็อกอินอีเมล
-    server.send_message(msg)  # ส่งอีเมล
+    server.login(from_email, password) 
+    server.send_message(msg) 
     print("Email sent successfully!")
 except Exception as e:
     print(f"Failed to send email: {e}")
